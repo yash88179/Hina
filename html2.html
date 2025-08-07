@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Birthday Surprise</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      background: #ffe4ec;
+      overflow-x: hidden;
+    }
+
+    section {
+      text-align: center;
+      padding: 50px 20px;
+    }
+
+     h1 {
+      text-align: center;
+      margin-top: 20px;
+      color: #d6336c;
+    }
+
+    .btn {
+      background: linear-gradient(to right, #ff007a, #a800ff);
+      color: white;
+      padding: 15px 30px;
+      border: none;
+      border-radius: 30px;
+      font-size: 16px;
+      cursor: pointer;
+      box-shadow: 0 0 15px rgba(255,0,200,0.6);
+      transition: transform 0.2s;
+    }
+
+    .btn:hover {
+      transform: scale(1.05);
+    }
+
+    #intro {
+      background: linear-gradient(to bottom right, #3a1c71, #d76d77, #ffaf7b);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: white;
+    }
+
+    .header-box {
+      background: #d53abf;
+      color: white;
+      font-size: 1.5em;
+      padding: 10px 30px;
+      border-radius: 30px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+
+    #notePage {
+      background: linear-gradient(135deg, #a18cd1, #fbc2eb);
+      min-height: 100vh;
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .note-container {
+      background: white;
+      width: 80%;
+      max-width: 600px;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      text-align: left;
+    }
+
+    .note-header {
+      background: #d53abf;
+      color: white;
+      font-size: 1.2em;
+      padding: 8px 20px;
+      border-radius: 25px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .signature {
+      margin-top: 20px;
+      font-style: italic;
+      text-align: right;
+      color: #555;
+    }
+
+    #start {
+      display: none;
+      background: #fff0f5;
+      min-height: 100vh;
+    }
+
+    #unlock {
+      display: none;
+      background: #ffe0f0;
+      min-height: 100vh;
+    }
+
+    #carousel {
+      display: none;
+      background: #fff;
+      min-height: 100vh;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .carousel-wrapper {
+      position: relative;
+      margin: 30px 40px;
+    }
+    .carousel {
+      display: flex;
+      gap: 20px;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      padding: 10px;
+    }
+
+    .carousel::-webkit-scrollbar {
+      height: 10px;
+    }
+
+    .carousel::-webkit-scrollbar-thumb {
+      background: #ff69b4;
+      border-radius: 6px;
+    }
+    .memory {
+      flex-shrink: 0;
+      background: white;
+      padding: 15px;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      width: 250px;
+      scroll-snap-align: start;
+    }
+
+    .memory img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 4; /* Good for portraits, adjusts well for vertical photos */
+  object-fit: cover;   /* Ensures the image fills the frame nicely */
+  border-radius: 16px; /* Slightly larger for a softer look */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Adds depth */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.memory img:hover {
+  transform: scale(1.03); /* Slight zoom on hover */
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+
+    .memory p {
+      font-size: 16px;
+      margin-top: 10px;
+      color: #444;
+    }
+
+    .btn {
+      background-color: #ff69b4;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      margin-top: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .btn:hover {
+      background-color: #ff1493;
+    }
+
+    .arrow-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: #ff69b4;
+      border: none;
+      color: white;
+      font-size: 24px;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+      z-index: 2;
+    }
+
+    .arrow-btn:hover {
+      background-color: #ff1493;
+    }
+
+    .left-arrow {
+      left: -20px;
+    }
+
+    .right-arrow {
+      right: -20px;
+    }
+
+    .celebrate-btn-container {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    /* Sparkles */
+    .sparkle {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: radial-gradient(circle, #fff 0%, #ff66ff 60%, transparent 100%);
+      border-radius: 50%;
+      opacity: 0.7;
+      animation: sparkleFloat 6s linear infinite;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    @keyframes sparkleFloat {
+      0% {
+        transform: translateY(0) scale(1);
+        opacity: 0.8;
+      }
+      50% {
+        transform: translateY(-100px) scale(1.2);
+        opacity: 0.3;
+      }
+      100% {
+        transform: translateY(-200px) scale(0.8);
+        opacity: 0;
+      }
+    }
+
+    #cakePage {
+      display: none;
+      background: #fff0f5;
+      min-height: 100vh;
+    }
+
+    .cake {
+      width: 120px;
+      margin: 30px auto;
+      position: relative;
+      cursor: pointer;
+      animation: floatCake 2s ease-in-out infinite;
+    }
+
+    .cake .layer {
+      width: 100%;
+      height: 30px;
+      background: linear-gradient(to right, #ff4f8f, #ff95a3);
+      margin-bottom: 5px;
+      border-radius: 10px;
+    }
+
+    .cake .candle {
+      width: 8px;
+      height: 25px;
+      background: white;
+      margin: auto;
+      position: absolute;
+      top: -25px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .cake .flame {
+      width: 12px;
+      height: 12px;
+      background: orange;
+      border-radius: 50%;
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      animation: flicker 0.3s infinite alternate;
+    }
+
+    @keyframes flicker {
+      from { opacity: 1; }
+      to { opacity: 0.4; }
+    }
+
+    @keyframes floatCake {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .celebrate {
+      display: none;
+      background: #fff8fb;
+      animation: fadeIn 1s ease-in-out forwards;
+      min-height: 100vh;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .balloons {
+      font-size: 2em;
+      animation: bounce 1s infinite alternate;
+    }
+
+    @keyframes bounce {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-10px); }
+    }
+
+    #outro {
+      display: none;
+      height: 100vh;
+      background: linear-gradient(to bottom right, #2c3e50, #8e44ad);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      animation: fadeBg 3s ease-in-out infinite alternate;
+    }
+
+    @keyframes fadeBg {
+      0% { background: linear-gradient(45deg, #1c1c1c, #4b0082); }
+      100% { background: linear-gradient(45deg, #6a1b9a, #9c27b0); }
+    }
+
+    #outro h1 {
+      font-family: 'Pacifico', cursive;
+      font-size: 2.8em;
+      text-shadow: 0 0 15px #fff;
+      animation: glow 2s infinite ease-in-out;
+    }
+
+    @keyframes glow {
+      0% { text-shadow: 0 0 10px #fff, 0 0 20px #ff00ff; }
+      100% { text-shadow: 0 0 20px #fff, 0 0 30px #ff66ff; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Start Transition -->
+<section id="intro">
+  <div class="header-box">🎉 Happy Birthday Madam Ji 🎉</div>
+  <br />
+  <button class="btn" onclick="goToNotePage()">Turn the Lights On ✨</button>
+</section>
+
+<!-- Note Page -->
+<section id="notePage">
+  <div class="note-header">🎈 Happy Birthday Madam Ji 🎈</div>
+  <div class="note-container">
+    <h2>Dear Madam Ji,</h2>
+    <p>
+      On this special day , i wont take your time oor bas itna hi bolunga ki sb cheez mere liye ek dream ki tarah h , jbse tere saath hu tbse mera life bahut sundar ho gya h , tujhe nhi pta ki tera kya value h life mein mera , mai ldae krta hu bahut kuch bola hu tumhe lekin i know you are the only person who love me the most , tere efforts , tera gussa hona , sb chhez mujhe bahut acha lgta ,I Love My Babe 😘😘😘
+    </p>
+    <p class="signature">Wishing you a long life ahead My Love 🎂✨<br><br>With love and warm wishes</p>
+    <br />
+    <button class="btn" onclick="showMainPage()">Next →</button>
+  </div>
+</section>
+
+<!-- First Page -->
+<section id="start">
+  <h1 style="background: linear-gradient(45deg, #ff1cb1, #ff9e4f); -webkit-background-clip: text; color: transparent;">Happy Birthday, My Love!</h1>
+  <p>To the most amazing woman in my life</p>
+  <button class="btn" onclick="showMemories()">Begin Your Surprise →</button>
+</section>
+
+<!-- Unlock Memories -->
+<section id="unlock">
+  <h1>Mirror of Memories</h1>
+  <div onclick="revealCarousel()" style="width:200px; margin:auto; padding:30px; background:#ffe0f0; border-radius:20px; cursor:pointer;">
+    ❤️ Click to unlock memories ❤️
+  </div>
+</section>
+
+<!-- Carousel -->
+<section id="carousel">
+    <h1>Mirror of Memories</h1>
+    <div class="carousel-wrapper">
+      <button class="arrow-btn left-arrow" onclick="scrollCarousel(-1)">&#8592;</button>
+
+      <div class="carousel" id="memoryCarousel">
+        <div class="memory">
+          <img src="IMG_20250805_143904_0435.jpg" alt="Memory 1" />
+          <p><strong>Your Cuteness</strong> Always Priceless!</p>
+          <button class="btn">Download this memory</button>
+        </div>
+        <div class="memory">
+          <img src="IMG_20250805_143949_0082.jpg" alt="Memory 2" />
+          <p><strong>Baby Girl</strong> ❤️❤️</p>
+          <button class="btn">Download this memory</button>
+        </div>
+        <div class="memory">
+          <img src="IMG_20250805_144706_0787.jpg" alt="Memory 3" />
+          <p><strong>One Of The Hottest Pic:</strong> It Felt Like time stopped! Uff Tera Figure</p>
+          <button class="btn">Download this memory</button>
+        </div>
+        <div class="memory">
+          <img src="IMG_20250805_144644_0566.jpg" alt="Memory 4" />
+          <p><strong>Control Nhi Rehta Mere Upar</strong> You Are Looking Very Beautiful</p>
+          <button class="btn">Download this memory</button>
+        </div>
+        <div class="memory">
+          <img src="IMG_20250805_144850_0881.jpg" alt="Memory 5" />
+          <p><strong>Cuteness Overloaded</strong> 💕💕💕</p>
+          <button class="btn">Download this memory</button>
+        </div>
+        <div class="memory">
+          <img src="IMG_20250805_144857_0334.jpg" alt="Memory 6" />
+          <p><strong>One Of The Most Beautiful Pic...</strong> Written in  my heart!</p>
+          <button class="btn">Download this memory</button>
+        </div>
+        <div class="memory">
+          <img src="IMG_20250805_144904_0241.jpg" alt="Memory 7" />
+          <p><strong>Hottest Pic Of Yours</strong> 😘😘😘</p>
+          <button class="btn">Download this memory</button>
+        </div>
+        <div class="memory">
+          <img src="IMG_20250805_144919_0089.jpg" alt="Memory 8" />
+          <p><strong>One Of The Best Pics</strong> ❤️❤️</p>
+          <button class="btn">Download this memory</button>
+        </div>
+        <div class="memory">
+          <img src="IMG_20250805_144925_0272.jpg" alt="Memory 9" />
+          <p><strong> Your Cuteness Ufff.....</strong> 😍😍😍</p>
+          <button class="btn">Download this memory</button>
+        </div>
+        <div class="memory">
+          <img src="IMG_20250805_144928_0772.jpg" alt="Memory 10" />
+          <p><strong> Your Expressions </strong> 🤗🤗🤗</p>
+          <button class="btn">Download this memory</button>
+        </div>
+        <div class="memory">
+          <img src="IMG_20250805_144931_0178.jpg" alt="Memory 11" />
+          <p><strong> Same As Rashmika's Expression...</strong> 😍😍</p>
+          <button class="btn">Download this memory</button>
+        </div>
+        <div class="memory">
+          <img src="IMG_20250805_144947_0372.jpg" alt="Memory 12" />
+          <p><strong> You In Saree Is The Best Thing...</strong> ❤️😘</p>
+          <button class="btn">Download this memory</button>
+        </div>
+        <div class="memory">
+          <img src="IMG_20250805_145006_0072.jpg" alt="Memory 13" />
+          <p><strong> Remember This When You Told Me Hold Your Hand </strong> It Felt Really Good</p>
+          <button class="btn">Download this memory</button>
+        </div>
+        <div class="memory">
+          <img src="IMG_20250805_145049_0856.jpg" alt="Memory 14" />
+          <p><strong>This Was When We Were Taking Snap</strong> 😁😁</p>
+          <button class="btn">Download this memory</button>
+        </div>
+        <div class="memory">
+          <img src="IMG_20250805_145055_0931.jpg" alt="Memory 15" />
+          <p><strong>Mela Bacha Bahut Sundar Lg Rha H</strong> 😘😘</p>
+          <button class="btn">Download this memory</button>
+        </div>
+        <div class="memory">
+          <img src="IMG_20250805_145108_0555.jpg" alt="Memory 16" />
+          <p><strong>This Was Our 1st Temple Visit Together</strong> 🤗🤗</p>
+          <button class="btn">Download this memory</button>
+        </div>
+        <div class="memory">
+          <img src="IMG_20250805_145116_0618.jpg" alt="Memory 17" />
+          <p><strong> 1st Time Tm Saree Mein Oor Main Kurta Mein</strong> We Look Good Together</p>
+          <button class="btn">Download this memory</button>
+        </div>
+        <div class="memory">
+          <img src="IMG_20250805_145146_0869.jpg" alt="Memory 18" />
+          <p><strong> You Ate Too Much That Day 😂😂😂</strong> </p>
+          <button class="btn">Download this memory</button>
+        </div>
+        <div class="memory">
+          <img src="IMG_20250805_145213_0316.jpg" alt="Memory " />
+          <p><strong>Bass Aese Hi Mere Ko Dekhte Rehna</strong> 😘😘❤️</p>
+          <button class="btn">Download this memory</button>
+        </div>
+        <div class="memory">
+          <img src="IMG_20250805_145228_0332.jpg" alt="Memory " />
+          <p><strong>I Love You Babe 😘😘😘😘❤️</strong> Missing You So Much </p>
+          <button class="btn">Download this memory</button>
+        </div>
+        <!-- Add more memory cards as needed -->
+      </div>
+
+      <button class="arrow-btn right-arrow" onclick="scrollCarousel(1)">&#8594;</button>
+    </div>
+
+    <div class="celebrate-btn-container">
+      <button class="btn" onclick="showCakePage()">Let's Celebrate →</button>
+    </div>
+  </section>
+
+<!-- Cake Page -->
+<section id="cakePage">
+  <h1>Let's Celebrate! 🎂</h1>
+  <div class="cake" onclick="startCelebration()">
+    <div class="candle"><div class="flame"></div></div>
+    <div class="layer"></div>
+    <div class="layer"></div>
+    <div class="layer"></div>
+  </div>
+</section>
+
+<!-- Celebration -->
+<section id="celebration" class="celebrate">
+  <h1>🎉 Let's Celebrate! 🎉</h1>
+  <div class="balloons">🎈🎈🎈🎈🎈</div>
+  <p><button class="btn" onclick="startOutro()">Continue to Final Wish →</button></p>
+</section>
+
+<!-- Final Wish -->
+<section id="outro">
+  <h1>Light Up My Life</h1>
+  <button class="btn" onclick="alert('Have a magical day! 🎇')">✨ Shine Bright ✨</button>
+</section>
+
+<!-- JavaScript -->
+<script>
+  function goToNotePage() {
+    document.getElementById('intro').style.display = 'none';
+    document.getElementById('notePage').style.display = 'flex';
+  }
+
+  function showMainPage() {
+    document.getElementById('notePage').style.display = 'none';
+    document.getElementById('start').style.display = 'block';
+  }
+
+  function showMemories() {
+    document.getElementById('start').style.display = 'none';
+    document.getElementById('unlock').style.display = 'block';
+  }
+
+  function revealCarousel() {
+    document.getElementById('unlock').style.display = 'none';
+    document.getElementById('carousel').style.display = 'block';
+    startSparkles();
+  }
+
+  function scrollCarousel(direction) {
+      const carousel = document.getElementById('memoryCarousel');
+      const scrollAmount = 300; // Adjust based on memory card width
+      carousel.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
+    }
+
+  function showCakePage() {
+    document.getElementById('carousel').style.display = 'none';
+    document.getElementById('cakePage').style.display = 'block';
+  }
+
+  function startCelebration() {
+    document.getElementById('cakePage').style.display = 'none';
+    document.getElementById('celebration').style.display = 'block';
+  }
+
+  function startOutro() {
+    document.getElementById('celebration').style.display = 'none';
+    document.getElementById('outro').style.display = 'flex';
+  }
+
+  function startSparkles() {
+    const carousel = document.getElementById('carousel');
+    for (let i = 0; i < 40; i++) {
+      const sparkle = document.createElement('div');
+      sparkle.className = 'sparkle';
+      sparkle.style.left = Math.random() * 100 + 'vw';
+      sparkle.style.bottom = Math.random() * 50 + 'vh';
+      sparkle.style.animationDuration = (4 + Math.random() * 4) + 's';
+      carousel.appendChild(sparkle);
+
+      setTimeout(() => sparkle.remove(), 10000);
+    }
+  }
+</script>
+
+</body>
+</html>
